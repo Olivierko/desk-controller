@@ -6,12 +6,14 @@ namespace c_sharp_console
 {
     internal class Program
     {
+        private const int UpdateMs = 1000;
+
         private static readonly Timer Timer;
         private static readonly Communicator Communicator;
 
         static Program()
         {
-            Timer = new Timer(Update, null, 0, 1000);
+            Timer = new Timer(Update, null, UpdateMs, UpdateMs);
             Communicator = new Communicator();
             Communicator.OnMessageReceived += OnMessageReceived;
         }

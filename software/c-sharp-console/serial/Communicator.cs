@@ -18,7 +18,6 @@ namespace c_sharp_console.serial
         private readonly Queue<byte> _messageQueue = new Queue<byte>();
 
         public event MessageReceived OnMessageReceived;
-        public bool IsOpen => _serialPort?.IsOpen ?? false;
 
         private SerialPort _serialPort;
         private MessagePosition _currentMessagePosition = MessagePosition.None;
@@ -53,19 +52,6 @@ namespace c_sharp_console.serial
 
             result = (MessageType)value;
             return true;
-        }
-
-        public void Start()
-        {
-            _serialPort = new SerialPort(PORT_NAME, BAUD_RATE);
-            _serialPort.DataReceived += OnDataReceived;
-            _serialPort.Open();
-        }
-
-        public void Write(MessageType type)
-        {
-            var bytes = new[] { (byte)type };
-            _serialPort.Write(bytes, 0, 1);
         }
 
         private void DequeueOne()
@@ -117,6 +103,45 @@ namespace c_sharp_console.serial
             _currentMessageValue = 0x00;
         }
 
+        private bool TryEnsureConnection()
+        {
+            _serialPort ??= new SerialPort(PORT_NAME, BAUD_RATE);
+
+            if (_serialPort.IsOpen)
+            {
+                return true;
+            }
+
+            try
+            {
+                _serialPort.Open();
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return _serialPort.IsOpen;
+        }
+
+        public void Start()
+        {
+            _serialPort = new SerialPort(PORT_NAME, BAUD_RATE);
+            _serialPort.DataReceived += OnDataReceived;
+            TryEnsureConnection();
+        }
+
+        public void Write(MessageType type)
+        {
+            if (!TryEnsureConnection())
+            {
+                return;
+            }
+
+            var bytes = new[] { (byte)type };
+            _serialPort.Write(bytes, 0, 1);
+        }
+
         public void Process()
         {
             lock (_messageQueue)
@@ -131,6 +156,11 @@ namespace c_sharp_console.serial
 
         public void Stop()
         {
+            if (!_serialPort.IsOpen)
+            {
+                return;
+            }
+
             _serialPort.Close();
         }
     }

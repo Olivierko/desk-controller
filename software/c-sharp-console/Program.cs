@@ -68,11 +68,6 @@ namespace c_sharp_console
 
         private static void Update(object o)
         {
-            if (!Communicator.IsOpen)
-            {
-                return;
-            }
-
             Communicator.Write(MessageType.STATUS_REQUEST);
         }
     }

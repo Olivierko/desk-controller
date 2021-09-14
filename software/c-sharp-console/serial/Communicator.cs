@@ -56,7 +56,7 @@ namespace c_sharp_console.serial
 
         private void DequeueOne()
         {
-            byte item;
+            byte message;
             lock (_messageQueue)
             {
                 if (_messageQueue.Count == 0)
@@ -64,23 +64,23 @@ namespace c_sharp_console.serial
                     return;
                 }
 
-                item = _messageQueue.Dequeue();
+                message = _messageQueue.Dequeue();
             }
 
             switch (_currentMessagePosition)
             {
                 case MessagePosition.None:
-                    _currentMessagePosition = item == MSG_START_MARK ? MessagePosition.Start : MessagePosition.None;
+                    _currentMessagePosition = message == MSG_START_MARK ? MessagePosition.Start : MessagePosition.None;
                     break;
                 case MessagePosition.Start:
-                    _currentMessagePosition = TryParseMessageType(item, out _currentMessageType) ? MessagePosition.Type : MessagePosition.None;
+                    _currentMessagePosition = TryParseMessageType(message, out _currentMessageType) ? MessagePosition.Type : MessagePosition.None;
                     break;
                 case MessagePosition.Type:
-                    _currentMessageValue = item;
+                    _currentMessageValue = message;
                     _currentMessagePosition = MessagePosition.Value;
                     break;
                 case MessagePosition.Value:
-                    _currentMessagePosition = item == MSG_END_MARK ? MessagePosition.End : MessagePosition.None;
+                    _currentMessagePosition = message == MSG_END_MARK ? MessagePosition.End : MessagePosition.None;
                     break;
                 case MessagePosition.End:
                     throw new Exception("End of message wasn't processed.");

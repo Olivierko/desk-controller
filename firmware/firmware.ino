@@ -17,6 +17,7 @@
 #define MSG_STOP_REQUEST 0x24
 #define MSG_DOWN_REQUEST 0x25
 #define MSG_UP_REQUEST 0x26
+#define MSG_DEBUG_REQUEST 0x27
 
 enum Direction {
   none = 0x00,
@@ -29,7 +30,6 @@ unsigned long _lastTime;
 Direction _state;
 
 void setup(){
-
   _state = none;
 
   Serial.begin(9600);
@@ -86,6 +86,10 @@ void handleMessaging(){
     case MSG_UP_REQUEST:
       _state = (_state == none) ? up : none;
       break;
+    case MSG_DEBUG_REQUEST:
+      digitalWrite(PIN_SIGNAL_IN, LOW);
+      delay(50);
+      break;
   }
 }
 
@@ -109,8 +113,7 @@ void handleState(){
   }
 }
 
-void handleSignal()
-{
+void handleSignal(){
     unsigned char signalValue = digitalRead(PIN_SIGNAL_IN);
 
     byte msg[] = {MSG_DEBUG_RESPONSE, signalValue};

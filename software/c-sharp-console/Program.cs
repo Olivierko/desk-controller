@@ -18,7 +18,7 @@ namespace c_sharp_console
             Communicator.OnMessageReceived += OnMessageReceived;
         }
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             Communicator.Start();
             ReadCommand();
@@ -31,14 +31,13 @@ namespace c_sharp_console
             {
                 case MessageType.STATUS_RESPONSE:
                     var state = (DeskState)value;
-                    Console.WriteLine($"Desk state is: {state}");
+                    Console.WriteLine($"############ STATE: {state}");
                     break;
                 case MessageType.DEBUG_RESPONSE:
-                    //Console.WriteLine($"############  DESK DEBUG MSG: {value}");
+                    Console.WriteLine($"############ DEBUG: {value}");
                     break;
                 default:
-                    Console.WriteLine($"Message received: {type}, value: {value}");
-                    break;
+                    throw new NotImplementedException();
             }
         }
 
@@ -58,6 +57,9 @@ namespace c_sharp_console
                         break;
                     case ConsoleKey.DownArrow:
                         Communicator.Write(MessageType.DOWN_REQUEST);
+                        break;
+                    case ConsoleKey.Home:
+                        Communicator.Write(MessageType.DEBUG_REQUEST);
                         break;
                     case ConsoleKey.Escape:
                         return;

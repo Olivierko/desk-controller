@@ -9,6 +9,7 @@ namespace c_sharp_console.serial
         DEBUG_RESPONSE = 0x23,
         STOP_REQUEST = 0x24,
         DOWN_REQUEST = 0x25,
-        UP_REQUEST = 0x26
+        UP_REQUEST = 0x26,
+        DEBUG_REQUEST = 0x27
     }
 }

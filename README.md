@@ -1,6 +1,6 @@
 # desk-controller
 
-This is a project which replaces a LOGICDATA motor controller with an Arduino Uno that uses serial communication with a console application.
+This project replaces a LOGICDATA motor controller with an Arduino that communicates through USB using a console application.
 
 ## Installation
 

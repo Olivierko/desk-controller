@@ -1,7 +1,7 @@
 // pins
 #define PIN_SIGNAL_IN 2
-#define PIN_UP_OUT 3
-#define PIN_DOWN_OUT 4
+#define PIN_UP_OUT 4
+#define PIN_DOWN_OUT 5
 
 #define CYCLE_RATE 1000
 #define MESSAGE_LENGTH 2
@@ -13,11 +13,11 @@
 // message types
 #define MSG_STATUS_REQUEST 0x21
 #define MSG_STATUS_RESPONSE 0x22
-#define MSG_DEBUG_RESPONSE 0x23
-#define MSG_STOP_REQUEST 0x24
-#define MSG_DOWN_REQUEST 0x25
-#define MSG_UP_REQUEST 0x26
-#define MSG_DEBUG_REQUEST 0x27
+#define MSG_DEBUG_REQUEST 0x23
+#define MSG_DEBUG_RESPONSE 0x24
+#define MSG_STOP_REQUEST 0x25
+#define MSG_DOWN_REQUEST 0x27
+#define MSG_UP_REQUEST 0x29
 
 enum Direction {
   none = 0x00,
